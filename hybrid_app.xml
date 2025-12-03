@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" type="device">
+  <diagram id="hybrid_chat_widget" name="Hybrid Chat Widget Flow">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- User -->
+        <mxCell id="user" value="Mobile User" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="220" width="30" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Container: Mobile App -->
+        <mxCell id="mobile_app" value="Mobile App (Flutter)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;startSize=23;" vertex="1" parent="1">
+          <mxGeometry x="120" y="40" width="540" height="560" as="geometry" />
+        </mxCell>
+
+        <!-- The Widget UI -->
+        <mxCell id="chat_widget_ui" value="Smart Chat Widget&#xa;(Native Flutter UI)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" vertex="1" parent="mobile_app">
+          <mxGeometry x="40" y="180" width="140" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="connectivity" value="Connectivity&#xa;Manager" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="mobile_app">
+          <mxGeometry x="240" y="175" width="100" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Offline Path Components -->
+        <mxCell id="offline_controller" value="Offline Controller" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="mobile_app">
+          <mxGeometry x="220" y="320" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="inference_engine" value="On-Device LLM&#xa;(MediaPipe / Gemma)" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#d5e8d4;strokeColor=#82b366;size=15;" vertex="1" parent="mobile_app">
+          <mxGeometry x="220" y="420" width="140" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="local_vector_db" value="Local Vector DB&#xa;(Offline RAG)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="mobile_app">
+          <mxGeometry x="400" y="415" width="100" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Online Path Adapter -->
+        <mxCell id="api_client" value="REST API Client" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="mobile_app">
+          <mxGeometry x="230" y="60" width="120" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- External Systems -->
+        <mxCell id="cloud_api" value="Python Backend API&#xa;(Same API used by Website)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="720" y="100" width="160" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="cloud_db" value="MariaDB&#xa;(Full Terminology)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="755" y="200" width="90" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Logic Flow -->
+        <mxCell id="e1" value="Open Chat" style="endArrow=classic;html=1;" edge="1" parent="1" source="user" target="chat_widget_ui">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e2" value="Send Message" style="endArrow=classic;html=1;" edge="1" parent="1" source="chat_widget_ui" target="connectivity">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Online Branch -->
+        <mxCell id="e3" value="Online" style="endArrow=classic;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="connectivity" target="api_client">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e4" value="HTTPS POST" style="endArrow=classic;html=1;" edge="1" parent="1" source="api_client" target="cloud_api">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e5" value="Response" style="endArrow=classic;html=1;dashed=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="cloud_api" target="chat_widget_ui">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="700" y="130" />
+              <mxPoint x="450" y="130" />
+              <mxPoint x="180" y="215" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Offline Branch -->
+        <mxCell id="e6" value="Offline" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="connectivity" target="offline_controller">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e7" value="Retrieve Context" style="endArrow=classic;html=1;" edge="1" parent="1" source="offline_controller" target="local_vector_db">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="450" y="345" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e8" value="Inference (Context + Query)" style="endArrow=classic;html=1;" edge="1" parent="1" source="offline_controller" target="inference_engine">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e9" value="Stream Response" style="endArrow=classic;html=1;dashed=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="inference_engine" target="chat_widget_ui">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="110" y="455" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Notes -->
+        <mxCell id="note1" value="Note: This UI replaces the &#xa;WebView Chainlit Widget.&#xa;It mimics Chainlit's look." style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#fff2cc;strokeColor=#d6b656;size=15;align=left;" vertex="1" parent="1">
+          <mxGeometry x="30" y="80" width="160" height="70" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
